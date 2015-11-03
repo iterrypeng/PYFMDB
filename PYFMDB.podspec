@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "0.0.1"
   s.summary      = "Operations library of sqlite base on FMDB"
   s.homepage     = "https://github.com/iterrypeng/PYFMDB"
-  s.license      = "Apache"
+  s.license      = "MIT"
   s.author       = { "pengyong" => "pengyong@veldasoft.com" }
   s.platform     = :ios
   s.source       = { :git => "https://github.com/iterrypeng/PYFMDB.git", :tag => "0.0.1" }
