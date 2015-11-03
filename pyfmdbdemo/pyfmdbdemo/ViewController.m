@@ -34,7 +34,6 @@
                            @"id":@"integer primary key autoincrement",
                            @"name":@"text not null",
                            @"wheels":@"integer",
-                           
                            };
     
     [self.db createTableWithDict:data :@"car"];
