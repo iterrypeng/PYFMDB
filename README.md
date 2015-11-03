@@ -17,7 +17,9 @@ PYFMDB *db = [[PYFMDB alloc] initWithDbName:@"test.sqlite"];
 ```
 ### 创建数据库表
 创建数据库表前可以用set方法设置数据库表前缀
+```
 db.prefix = @"t_";
+```
 创建数据库表是通过`createTableWithDict`方法 将数据库表结构以字典形式导入
 例如创建一个表名为car，表中有 id，name，wheels 三个子段， id 为自曾字段
 ```
