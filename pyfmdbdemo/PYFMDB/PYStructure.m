@@ -31,6 +31,9 @@
 
 -(NSDictionary *)structureDictory{
     __block NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    if (self.structureArray.count ==0) {
+        return [NSDictionary dictionaryWithDictionary:dict];
+    }
     [self.structureArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [dict addEntriesFromDictionary:obj];
     }];
@@ -51,6 +54,9 @@
 }
 -(NSString *)fieldsString{
    __block NSString *fields = nil;
+    if (self.fieldsArray.count ==0) {
+        return fields;
+    }
     [self.fieldsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (fields==nil) {
             fields = obj;
