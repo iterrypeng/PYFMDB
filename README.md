@@ -131,12 +131,12 @@ if([table isEmpty]){
 ```
 ####调试信息
 ```
-NSLog(@"dbpath:%@",table.databasePath);
-NSLog(@"lastSql:%@",table.lastSql);
-NSLog(@"dbname:%@",table.databaseName);
-NSLog(@"tablename:%@",table.tableName);
-NSLog(@"table structure:%@",table.structure.structureDictory);
-NSLog(@"table fields:%@",table.structure.fieldsString);
+NSLog(@"dbpath:%@",table.databasePath);//数据库位置
+NSLog(@"lastSql:%@",table.lastSql);//最后执行的sql
+NSLog(@"dbname:%@",table.databaseName);//数据库名
+NSLog(@"tablename:%@",table.tableName);//数据表名
+NSLog(@"table structure:%@",table.structure.structureDictory);//数据表结构
+NSLog(@"table fields:%@",table.structure.fieldsString);//数据表字段
 ```
 
 
