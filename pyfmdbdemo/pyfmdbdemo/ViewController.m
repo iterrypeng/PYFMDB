@@ -7,9 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "PYFMDB.h"
 @interface ViewController ()
-@property(nonatomic, strong)PYFMDB *db;
 - (IBAction)add;
 - (IBAction)update;
 - (IBAction)delete;
@@ -21,109 +19,55 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
-    // 1 链接数据库
-    self.db = [[PYFMDB alloc] initWithDbName:@"car.sqlite"];
-    
-    // 2 创建表
-    // 2.1 设置表的前缀
-    self.db.prefix = @"t_";
-    
-    // 2.2 设置表的字段
-    NSDictionary *data = @{
-                           @"id":@"integer primary key autoincrement",
-                           @"name":@"text not null",
-                           @"wheels":@"integer",
-                           };
-    
-    [self.db createTableWithDict:data :@"car"];
-    
-    NSLog(@"sql:%@",self.db.dbPath);
+    NSLog(@"%@",self.table.structure.fieldsString);
+    NSLog(@"table count:%lu",(unsigned long)[self.table count]);
+    NSLog(@"sql:%@",self.table.lastSql);
 }
 
 
-
+-(CarTable *)table{
+    if (_table) {
+        return _table;
+    }
+    _table = [[CarTable alloc] init];
+    return _table;
+}
 - (IBAction)add {
-    // 1 重置查询条件
-    [self.db clean];
-    // 2 选择要操作的表
-    [self.db setCurrentTableName:@"car"];
     // 3 添加数据
     for (int i=0; i<10; i++) {
         NSDictionary *data = @{
                                @"name":@"奥迪",
                                @"wheels":@4 ,
                                };
-        [self.db add:data];
+        [self.table addFields:data];
     }
-    NSLog(@"sql:%@",self.db.lastSql);
+    NSLog(@"sql:%@",self.table.lastSql);
     
+    NSLog(@"table count:%lu",(unsigned long)[self.table count]);
+     NSLog(@"sql:%@",self.table.lastSql);
 }
 
 - (IBAction)update {
-    // 1 重置查询条件
-    [self.db clean];
-    
-    // 2 选择要操作的表
-    [self.db setCurrentTableName:@"car"];
-    
-    // 3 设置更新条件
-    [self.db whereWithString:@"id > 2"];
-    // 4 保存更新条件
-    [self.db save:@{@"name":@"奔驰"}];
-    
-    NSLog(@"currentsql:%@",self.db.lastSql);
+    [self.table updateFields:@{@"name":@"奔驰"} andWhere:@"id > 2"];
+    NSLog(@"sql:%@",self.table.lastSql);
 }
 
 - (IBAction)delete {
-    // 1 重置查询条件
-    [self.db clean];
-    
-    // 2 选择要操作的表
-    [self.db setCurrentTableName:@"car"];
-    
-    // 3 设置删除条件
-    NSDictionary *data = @{
-                           @"id":@1,
-                           };
-    
-    // 4 删除
-    [self.db delete:data];
-    NSLog(@"currentsql:%@",self.db.lastSql);
+   
+    [self.table deleteWithWhere:@"id>5"];
+    NSLog(@"sql:%@",self.table.lastSql);
     
 }
 
 - (IBAction)query {
-    // 1 重置查询条件
-    [self.db clean];
-    
-    // 2 选择要操作的表
-    [self.db setCurrentTableName:@"car"];
-    // 3 设置查询字段
-    self.db.fields = @[@"id",@"name"];
-    // 4 设置限制
-    [self.db setLimit:@"1,10"];
-    // 5 设置查询条件
-    [self.db whereWithString:@"id >1"];
-    // 6 设置顺序
-    self.db.order = @"id desc";
-    // 7 查询结果
-    NSArray *results = [self.db select];
-    NSLog(@"currentsql:%@",self.db.lastSql);
-    NSLog(@"%@",results);
+    NSArray *result = [self.table selectWithWhere:nil andFields:@"*" andPage:1 andPageSize:5 andOrder:@"id desc"];
+    NSLog(@"%@",result);
+    NSLog(@"lastsql:%@",self.table.lastSql);
     
 }
 
 - (IBAction)truncate {
-    // 1 重置查询条件
-    [self.db clean];
-    // 2 选择要操作的表
-    [self.db setCurrentTableName:@"car"];
-    // 3 设置查询条件
-    [self.db whereWithString:@"1"];
-    // 4 删除
-    [self.db delete];
-     NSLog(@"currentsql:%@",self.db.lastSql);
+    [self.table truncate];
 }
 
 @end

@@ -1,6 +1,6 @@
 //
-//  PYFMDB
-//  pyFMDB 基于 FMDB的数据库封装操作处理类
+//  PYFMDB.h
+//  Operations library of sqlite base on FMDB
 //
 //  Created by terry on 15/3/28.
 //  Copyright (c) 2015年 Velda. All rights reserved.
@@ -9,6 +9,18 @@
 #import <Foundation/Foundation.h>
 @class FMDatabaseQueue;
 @interface PYFMDB : NSObject{
+    //以下是因为同时重写了get和set方法,故将变量写在这里
+    /**
+     *  查询条件
+     */
+    NSString *_limit;
+    NSString *_where;
+    NSString *_order;
+    NSString *_group;
+    /**
+     *  缓存ID
+     */
+    NSString *_cacheID;
 }
 
 /**
@@ -81,16 +93,10 @@
  *  表里的所有字段(锁定)
  */
 @property (nonatomic,strong)  NSDictionary * currentTableFields_lock;
-
-/**
- *  要执行的查询条件
- */
-@property (nonatomic,strong) NSString * where;
-
 /**
  *  要执行的查询条件(锁定)
  */
-@property (nonatomic,strong) NSString * where_lock;
+@property (nonatomic,copy) NSString * where_lock;
 
 /**
  *  待更新的数据源
@@ -101,29 +107,22 @@
  */
 @property (nonatomic,strong) id data_lock;
 /**
- *  Order条件
- */
-@property (nonatomic,strong) NSString * order;
-/**
  *  Order条件(锁定)
  */
-@property (nonatomic,strong) NSString * order_lock;
-/**
- *  group条件
- */
-@property (nonatomic,strong) NSString * group;
+@property (nonatomic,copy) NSString * order_lock;
+
 /**
  *  group条件(锁定)
  */
-@property (nonatomic,strong) NSString * group_lock;
+@property (nonatomic,copy) NSString * group_lock;
 /**
- *  查询限制条数
+ *  缓存标识(锁定)
  */
-@property (nonatomic,strong) NSString * limit;
+@property (nonatomic,copy) NSString * cacheID_lock;
 /**
  *  查询限制条数(锁定)
  */
-@property (nonatomic,strong) NSString * limit_lock;
+@property (nonatomic,copy) NSString * limit_lock;
 
 /**
  *  静态方法初始化数据库连接
@@ -154,15 +153,6 @@
  *  @return 执行是否成功
  */
 -(bool)createTableWithDict:(NSDictionary *)dict : (NSString *)tableName;
-/**
- *  为字段创建普通索引
- *
- *  @param field     字段名称
- *  @param tableName 表名
- *
- *  @return 执行是否成功
- */
--(bool)createIndexForField:(NSString *)field : (NSString *)tableName;
 /**
  *  执行sql查询
  *
@@ -363,4 +353,111 @@
  *  @return PYFMDB对象
  */
 -(instancetype)reset;
+/**
+ *  重写order get方法
+ *
+ *  @return 要排序的条件
+ */
+- (NSString *)order;
+/**
+ *  设置order条件
+ *
+ *  @param order order条件
+ */
+-(void)setOrder:(NSString *)order;
+/**
+ *  数据表是否为空
+ *
+ *  @param tableName 数据库表名
+ *
+ *  @return bool类型值 YES =为空， NO = 不为空
+ */
+-(BOOL)isEmptyWithTableName:(NSString *)tableName;
+/**
+ *  清空数据表
+ *
+ *  @param tableName 表名
+ */
+-(void)truncateTableWithTableName:(NSString *)tableName;
+/**
+ *  公共删除方法
+ *
+ *  @param dict 字典
+ */
+-(void)deleteTableWithDict:(NSDictionary *)dict : (NSString *)tableName;
+/**
+ *  展示Table数据
+ *
+ *  @param page     当前页
+ *  @param pagesize 分页大小
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andTableName:(NSString *)tableName;
+/**
+ *  展示Table数据
+ *
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param order     排序
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order andTableName:(NSString *)tableName;
+
+/**
+ *  展示Table数据
+ *
+ *  @param fields    字段，（多个字段半角逗号隔开）
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithFields:(NSString *)fields andPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andTableName:(NSString *)tableName;
+
+
+/**
+ *  展示Table数据
+ *
+ *  @param fields    字段，（多个字段半角逗号隔开）
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param order     排序
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithFields:(NSString *)fields andPages:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order andTableName:(NSString *)tableName;
+#pragma mark - cache 缓存处理方法
+/**
+ *  将数据缓存入文件
+ *
+ *  @param data     数据源
+ *  @param cacheKey 缓存键名
+ *
+ *  @return 是否成功缓存
+ */
+-(BOOL)setObject:(id)data ForCacheKey:(NSString *)cacheKey;
+/**
+ *  根据缓存键名读取缓存内容
+ *
+ *  @param cacheKey 缓存键名
+ *
+ *  @return 缓存键值
+ */
+- (id )objectForCacheKey:(NSString *)cacheKey;
+#pragma mark - 索引操作
+/**
+ *  为字段创建普通索引
+ *
+ *  @param field     字段名称
+ *  @param tableName 表名
+ *
+ *  @return 执行是否成功
+ */
+-(bool)createIndexWithField:(NSString *)field andTableName: (NSString *)tableName;
 @end

@@ -20,6 +20,9 @@
 		56C7F29C1BE8D5F00054E946 /* FMResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F2941BE8D5F00054E946 /* FMResultSet.m */; };
 		56C7F29D1BE8D5F00054E946 /* PYFMDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C7F2971BE8D5F00054E946 /* PYFMDB.m */; };
 		56C7F2A11BE8D7120054E946 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 56C7F2A01BE8D7120054E946 /* libsqlite3.0.tbd */; };
+		DEB182131C0EAB0400A9F587 /* PYTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182121C0EAB0400A9F587 /* PYTable.m */; };
+		DEB182161C0EABC100A9F587 /* PYStructure.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182151C0EABC100A9F587 /* PYStructure.m */; };
+		DEB182191C0F33F500A9F587 /* CarTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182181C0F33F500A9F587 /* CarTable.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,12 @@
 		56C7F2961BE8D5F00054E946 /* PYFMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYFMDB.h; sourceTree = "<group>"; };
 		56C7F2971BE8D5F00054E946 /* PYFMDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYFMDB.m; sourceTree = "<group>"; };
 		56C7F2A01BE8D7120054E946 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		DEB182111C0EAB0400A9F587 /* PYTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYTable.h; sourceTree = "<group>"; };
+		DEB182121C0EAB0400A9F587 /* PYTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYTable.m; sourceTree = "<group>"; };
+		DEB182141C0EABC100A9F587 /* PYStructure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PYStructure.h; sourceTree = "<group>"; };
+		DEB182151C0EABC100A9F587 /* PYStructure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYStructure.m; sourceTree = "<group>"; };
+		DEB182171C0F33F500A9F587 /* CarTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTable.h; sourceTree = "<group>"; };
+		DEB182181C0F33F500A9F587 /* CarTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTable.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +101,8 @@
 				56C7F2801BE8D5900054E946 /* LaunchScreen.storyboard */,
 				56C7F2831BE8D5900054E946 /* Info.plist */,
 				56C7F2721BE8D5900054E946 /* Supporting Files */,
+				DEB182171C0F33F500A9F587 /* CarTable.h */,
+				DEB182181C0F33F500A9F587 /* CarTable.m */,
 			);
 			path = pyfmdbdemo;
 			sourceTree = "<group>";
@@ -127,6 +138,10 @@
 			children = (
 				56C7F2961BE8D5F00054E946 /* PYFMDB.h */,
 				56C7F2971BE8D5F00054E946 /* PYFMDB.m */,
+				DEB182111C0EAB0400A9F587 /* PYTable.h */,
+				DEB182121C0EAB0400A9F587 /* PYTable.m */,
+				DEB182141C0EABC100A9F587 /* PYStructure.h */,
+				DEB182151C0EABC100A9F587 /* PYStructure.m */,
 			);
 			path = PYFMDB;
 			sourceTree = "<group>";
@@ -206,6 +221,9 @@
 				56C7F2771BE8D5900054E946 /* AppDelegate.m in Sources */,
 				56C7F29B1BE8D5F00054E946 /* FMDatabaseQueue.m in Sources */,
 				56C7F29D1BE8D5F00054E946 /* PYFMDB.m in Sources */,
+				DEB182131C0EAB0400A9F587 /* PYTable.m in Sources */,
+				DEB182161C0EABC100A9F587 /* PYStructure.m in Sources */,
+				DEB182191C0F33F500A9F587 /* CarTable.m in Sources */,
 				56C7F2741BE8D5900054E946 /* main.m in Sources */,
 				56C7F2981BE8D5F00054E946 /* FMDatabase.m in Sources */,
 				56C7F29C1BE8D5F00054E946 /* FMResultSet.m in Sources */,
@@ -356,6 +374,7 @@
 				56C7F2881BE8D5900054E946 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

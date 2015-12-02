@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "CarTable.h"
 @interface ViewController : UIViewController
 
-
+@property(nonatomic,strong) CarTable *table;
 @end
 

@@ -1,6 +1,6 @@
 //
-//  PYFMDB
-//  pyFMDB 基于 FMDB的数据库封装操作处理类
+//  PYFMDB.m
+//  Operations library of sqlite base on FMDB
 //
 //  Created by terry on 15/3/28.
 //  Copyright (c) 2015年 Velda. All rights reserved.
@@ -16,8 +16,8 @@
  *  @param tablename 表名
  */
 - (void)setCurrentTableName:(NSString *)currentTableName{
-    _currentTableName = currentTableName;
-    __block NSString *sql = [NSString stringWithFormat:@"PRAGMA table_info(%@%@)",self.prefix,_currentTableName];
+    _currentTableName = [NSString stringWithFormat:@"%@%@",self.prefix,currentTableName];
+    __block NSString *sql = [NSString stringWithFormat:@"PRAGMA table_info(%@)",_currentTableName];
     __block NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [_queue inDatabase:^(FMDatabase *db) {
         FMResultSet *rs= [db executeQuery:sql];
@@ -39,6 +39,46 @@
     _dbPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:_dbName];
     _queue = [FMDatabaseQueue databaseQueueWithPath:_dbPath];
 }
+/**
+ *  设置limit条件
+ *
+ *  @param limit limit条件
+ */
+-(void)setLimit:(NSString *)limit{
+    _limit = limit;
+}
+/**
+ *  设置group条件
+ *
+ *  @param group group条件
+ */
+-(void)setGroup:(NSString *)group{
+    _group = group;
+}
+/**
+ *  设置order条件
+ *
+ *  @param order order条件
+ */
+-(void)setOrder:(NSString *)order{
+    _order = order;
+}
+/**
+ *  设置where条件
+ *
+ *  @param where where条件
+ */
+-(void)setWhere:(NSString *)where{
+    _where = where;
+}
+/**
+ *  设置缓存标识
+ *
+ *  @param cacheID 缓存标识
+ */
+-(void)setCacheID:(NSString *)cacheID{
+    _cacheID = cacheID;
+}
 
 #pragma mark - get方法重写
 
@@ -59,10 +99,10 @@
  *  @return 数据库表前缀
  */
 -(NSString *)prefix{
-    if (_prefix) {
-        return [NSString stringWithFormat:@"%@",_prefix];
+    if (_prefix.length==0) {
+        return [NSString string];
     }
-    return @"";
+    return _prefix;
 }
 /**
  *  重写limit get方法
@@ -71,7 +111,7 @@
  */
 -(NSString *)limit{
     if (_limit.length==0) {
-        return  [NSString stringWithFormat:@"LIMIT 0,10"];
+        return [NSString string];
     }
     return [NSString stringWithFormat:@"LIMIT %@",_limit];
 }
@@ -83,7 +123,7 @@
 
 -(NSString *)where{
     if (_where.length>0) {
-        return [NSString stringWithFormat:@" WHERE %@",_where];
+        return [NSString stringWithFormat:@" WHERE %@",[[NSMutableString stringWithString:_where] stringByReplacingOccurrencesOfString:@" WHERE " withString:@""]];
     }
     return [NSString string];
 }
@@ -123,11 +163,26 @@
  *  @return 字符串版本fields
  */
 -(NSString *)fieldsString{
-   __block NSMutableString *str = [NSMutableString string];
+    __block NSMutableString *str = [NSMutableString string];
     [self.fields enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         str = [NSMutableString stringWithFormat:@"%@,%@",str,obj];
     }];
-    return [str stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+    NSString *ref = [str stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
+    if ([ref isEqualToString:@""] || [ref isEqual:nil]) {
+        return @" * ";
+    }
+    return ref;
+}
+/**
+ *  重写缓存ID get方法
+ *
+ *  @return 缓存ID
+ */
+-(NSString *)cacheID{
+    if (!_cacheID) {
+        return  [NSString stringWithFormat:@"%d" ,(int)[[NSDate date] timeIntervalSince1970]];
+    }
+    return _cacheID;
 }
 
 
@@ -153,6 +208,7 @@
 -(instancetype)initWithDbName:(NSString *)dbName{
     if(self =[super init]){
         [self setDbName:dbName];
+        [self createCacheTable];
     }
     return self;
 }
@@ -167,10 +223,11 @@
  *  @return 返回bool类型 创建成功返回YES 失败返回NO
  */
 - (bool)createTableWithDict:(NSDictionary *)dict :(NSString *)tableName{
-    __block NSMutableString *sql = [NSMutableString stringWithFormat:@"CREATE TABLE IF NOT EXISTS `%@%@` (",_prefix,tableName];
+    NSString *currentTableName = [NSString stringWithFormat:@"%@%@",self.prefix,tableName];
+    __block NSMutableString *sql = [NSMutableString stringWithFormat:@"CREATE TABLE IF NOT EXISTS `%@` (",currentTableName];
     [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         sql = [NSMutableString stringWithFormat:@"%@ %@ %@,",sql,key,obj];
-   }];
+    }];
     //去除右侧多余 ','
     NSString *leftsql = [sql stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];
     sql = [NSMutableString stringWithFormat:@"%@);",leftsql];
@@ -178,39 +235,37 @@
     return [self excuteUpdateWithSql:sql];
 }
 /**
- *  为字段创建普通索引
+ *  创建缓存数据库表
  *
- *  @param field     字段名称
- *  @param tableName 表名
- *
- *  @return 执行是否成功
+ *  @return 返回bool类型 创建成功返回YES 失败返回NO
  */
--(bool)createIndexForField:(NSString *)field :(NSString *)tableName{
-    __block NSMutableString *sql = [NSMutableString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@%@(%@)",field,_prefix,tableName,field];
-    _lastSql = sql;
+-(BOOL)createCacheTable{
+    NSString *sql = @"CREATE TABLE IF NOT EXISTS `_cache` (cacheID text primary key,cacheData BLOB);";
     return [self excuteUpdateWithSql:sql];
 }
+
 #pragma mark - 执行数据库查询与更新
 /**
  *  执行sql查询
  *
  *  @param sql sql语句
  *
- *  @return 查询结果集 数组NSArray
+ *  @return 查询结果集(字典)
  */
 - (NSArray *)excuteQueryWithSql:(NSString *)sql{
-   __block NSArray *result = [NSArray array];
+    __block NSArray *result = [NSArray array];
     [_queue inDatabase:^(FMDatabase *db) {
-     NSMutableArray *arr = [NSMutableArray array];
-     FMResultSet *rs = [db executeQuery:sql];
+        NSMutableArray *arr = [NSMutableArray array];
+        FMResultSet *rs = [db executeQuery:sql];
         while ([rs next]) {
             NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            NSMutableString *key = [NSMutableString string];
             for (int i=0; i<_fields.count; i++) {
-               NSMutableString *key  = [NSMutableString stringWithString:[_fields objectAtIndex:i]];
+                key = [NSMutableString stringWithString:[_fields objectAtIndex:i]];
                 //过滤"xxx as yyy" 情况
                 NSArray *keyarr =[key componentsSeparatedByString:@" as "];
                 if ([keyarr count]>0) {
-                   key =[NSMutableString stringWithString: [[keyarr lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                    key =[NSMutableString stringWithString: [[keyarr lastObject] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
                 }
                 //找到对应的currentTableField的type;keytype 只区分bloc和非bloc,非bloc一律转成nsstring
                 NSMutableString *keytype = nil;
@@ -284,7 +339,7 @@
  */
 - (instancetype)fieldsWithString:(NSString *)str{
     //将字符串转为数组
-   NSArray *fields = [str componentsSeparatedByString:@","];
+    NSArray *fields = [str componentsSeparatedByString:@","];
     if ([fields count]==0) {
         _fields = [NSArray arrayWithObject:str];
         return self;
@@ -323,17 +378,13 @@
     for (int i=0; i<allkeys.count; i++) {
         id key = [allkeys objectAtIndex:i];
         id obj = [dict objectForKey:key];
-        //value=数字 则直接等号赋值，不带单引号
-        if ([obj isKindOfClass:[NSNumber class]]) {
-            tmp = [NSMutableString stringWithFormat:@" `%@` = %@ AND ",key,obj];
-        }
         //value=字符串则直接等号赋值
         if ([obj isKindOfClass:[NSString class]]) {
-            tmp = [NSMutableString stringWithFormat:@" `%@` = '%@' AND ",key,[obj stringByReplacingOccurrencesOfString:@"'" withString:@"''"]];
+            tmp = [NSMutableString stringWithFormat:@" `%@` = '%@' AND ",key,obj];
         }
-        //value=数组则提取赋值符号
+        //value=数组则提取赋值符合
         if ([obj isKindOfClass:[NSArray class]] ) {
-            tmp = [NSMutableString stringWithFormat:@" `%@` %@ '%@' AND ",key,[obj objectAtIndex:0],[[obj objectAtIndex:1] stringByReplacingOccurrencesOfString:@"'" withString:@"''"]];
+            tmp = [NSMutableString stringWithFormat:@" `%@` %@ '%@' AND ",key,[obj objectAtIndex:0],[obj objectAtIndex:1]];
         }
         mutablestr = [NSMutableString stringWithFormat:@"%@%@",mutablestr,tmp];
     }
@@ -445,7 +496,7 @@
  *  @return 过滤后的字典数据
  */
 - (NSDictionary *)filterWithDict:(NSDictionary *)dict{
-   __block NSMutableDictionary *filterDict = [NSMutableDictionary dictionary];
+    __block NSMutableDictionary *filterDict = [NSMutableDictionary dictionary];
     [[self.currentTableFields allKeys] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([dict objectForKey:obj]) {
             [filterDict addEntriesFromDictionary:[NSDictionary dictionaryWithObject:[dict objectForKey:obj] forKey:obj]];
@@ -464,22 +515,9 @@
     //字典单条记录更新
     if ([_data isKindOfClass:[NSDictionary class]] && [_data count]>0) {
         NSString *keys = [NSString stringWithFormat:@"`%@`",[[_data allKeys] componentsJoinedByString:@"`,`"]];
-        //判断数据类型，数据类型为nsnumber则不加引号
-        NSMutableString *allValues = [NSMutableString string];
-        for (id object in [_data allValues]) {
-            if ([object isKindOfClass:[NSNumber class]]) {
-                allValues = [NSMutableString stringWithFormat:@"%@,%@",allValues,object];
-            }
-            else{
-                //转义单引号
-                NSMutableString *trueobj = [NSMutableString stringWithString:[object stringByReplacingOccurrencesOfString:@"'" withString:@"''"]];
-                allValues = [NSMutableString stringWithFormat:@"%@,'%@'",allValues,trueobj];
-            }
-        }
-        //去除两端逗号
-        NSString *values =[NSString stringWithString:[allValues stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]]];
-        NSString *sql = [NSString stringWithFormat:@"INSERT INTO `%@%@` (%@) values(%@);",self.prefix,self.currentTableName,keys,values];
-         return [self excuteUpdateWithSql:sql];
+        NSString *values =[NSString stringWithFormat:@"'%@'",[[_data allValues] componentsJoinedByString:@"','"]];
+        NSString *sql = [NSString stringWithFormat:@"INSERT INTO `%@` (%@) values(%@);",self.currentTableName,keys,values];
+        return [self excuteUpdateWithSql:sql];
     }
     //数组批量递归更新
     if ([_data isKindOfClass:[NSArray class]] && [_data count]>0) {
@@ -531,18 +569,10 @@
 - (bool)save{
     __block NSMutableString *setstring = [NSMutableString string];
     [_data enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        //判断数据类型
-        if ([obj isKindOfClass:[NSNumber class]]) {
-            setstring = [NSMutableString stringWithFormat:@"%@%@",setstring,[NSString stringWithFormat:@"`%@`=%@ and ",key,obj]];
-        }
-        else{
-            //转义带单引号的数据源
-            NSMutableString *trueobj = [NSMutableString stringWithString:[obj stringByReplacingOccurrencesOfString:@"'" withString:@"''"]];
-            setstring = [NSMutableString stringWithFormat:@"%@%@",setstring,[NSString stringWithFormat:@"`%@`='%@' and ",key,trueobj]];
-        }
+        setstring = [NSMutableString stringWithFormat:@"%@%@",setstring,[NSString stringWithFormat:@"`%@`='%@' , ",key,obj]];
     }];
-   NSString * tmp  = [setstring stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" and "]];
-    NSString *sql = [NSString stringWithFormat:@"UPDATE `%@%@` set %@ %@",self.prefix,self.currentTableName,tmp,self.where];
+    NSString * tmp  = [setstring stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" , "]];
+    NSString *sql = [NSString stringWithFormat:@"UPDATE `%@` set %@ %@",self.currentTableName,tmp,self.where];
     return [self excuteUpdateWithSql:sql];
 }
 /**
@@ -612,9 +642,7 @@
  *  @return 字典数据
  */
 - (NSDictionary *)find{
-    //判断fields字段条件
-    _fields = self.fields.count ==0 ? @[@"*"]:_fields;
-    _limit = @"1";
+    [self setLimit:@"1"];
     NSArray *arr = [self select];
     NSDictionary *result = [NSDictionary dictionaryWithDictionary:[arr lastObject]];
     return result;
@@ -625,9 +653,7 @@
  *  @return 结果数组
  */
 - (NSArray *)select{
-    _fields = self.fields.count ==0 ? @[@"*"]:_fields;
-    _limit = _limit ? _limit:@"0,10";
-    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM `%@%@` %@ %@ %@;",self.fieldsString,self.prefix,self.currentTableName,self.where,self.order,self.limit];
+    NSString *sql = [NSString stringWithFormat:@"SELECT %@ FROM `%@` %@ %@ %@;",self.fieldsString,self.currentTableName,self.where,self.order,self.limit];
     return [self excuteQueryWithSql:sql];
 }
 
@@ -638,7 +664,7 @@
  *  @return 是否成功执行sql
  */
 - (BOOL)delete{
-    NSString *sql = [NSString stringWithFormat:@"DELETE FROM `%@%@` %@",self.prefix,self.currentTableName,self.where];
+    NSString *sql = [NSString stringWithFormat:@"DELETE FROM `%@` %@",self.currentTableName,self.where];
     return [self excuteUpdateWithSql:sql];
 }
 /**
@@ -683,10 +709,10 @@
     _where = nil;
     _limit = nil;
     _data = nil;
-    //pengyong prefix默认不重置
-    //_prefix = nil;
+    // _prefix = nil;
     _order = nil;
     _group = nil;
+    _cacheID = nil;
     _lastSql = nil;
     _currentTableName = nil;
     return self;
@@ -701,9 +727,10 @@
     _where_lock = _where;
     _limit_lock = _limit;
     _data_lock = _data;
-    _prefix_lock = _prefix;
+    //_prefix_lock = _prefix;
     _order_lock = _order;
     _group_lock =_group;
+    _cacheID_lock =_cacheID;
     _currentTableFields_lock = _currentTableFields;
     _currentTableName_lock = _currentTableName;
     _lastSql_lock = _lastSql;
@@ -719,14 +746,196 @@
     _where =  _where_lock;
     _limit= _limit_lock;
     _data=_data_lock;
-    _prefix = _prefix_lock;
+    //  _prefix = _prefix_lock;
     _order =_order_lock;
     _group =_group_lock;
+    _cacheID = _cacheID_lock;
     _currentTableFields = _currentTableFields_lock;
     _currentTableName = _currentTableName_lock;
     _lastSql = _lastSql_lock;
     return self;
 }
+#pragma mark - cache 缓存处理方法
+/**
+ *  将数据缓存入文件
+ *
+ *  @param data     数据源
+ *  @param cacheKey 缓存键名
+ *
+ *  @return 是否成功缓存
+ */
+-(BOOL)setObject:(id)data ForCacheKey:(NSString *)cacheKey{
+    //记录当前状态，在cache操作后还原
+    [[[self lock] clean] setPrefix:@""];
+    //选择数据表
+    [self setCurrentTableName:@"_cache"];
+    //设置查询条件
+    [self whereWithDict:@{@"cacheID":cacheKey}];
+    //判断是否存在，存在记录则抹掉记录并且重写
+    if ([self queryCount]>0) {
+        //删除记录
+        [self delete];
+    }
+    NSData *cacheData = [data isKindOfClass:[NSData class]] ? data:[NSKeyedArchiver archivedDataWithRootObject:data];
+    
+    //添加数据源
+    [self dataWithDict:@{@"cacheID":cacheKey,@"cacheData":cacheData}];
+    return  [self add] && [self reset];
+}
+/**
+ *  根据缓存键名读取缓存内容
+ *
+ *  @param cacheKey 缓存键名
+ *
+ *  @return 缓存键值
+ */
+- (id )objectForCacheKey:(NSString *)cacheKey{
+    //记录当前状态，在cache操作后还原
+    [[self lock] clean];
+    //选择数据表
+    [self setCurrentTableName:@"_cache"];
+    //设置查询条件
+    [self whereWithDict:@{@"cacheID":cacheKey}];
+    //判断是否存在，存在记录则读取缓存，不存在则返回nil
+    if ([self queryCount]==0) {
+        return nil;
+    }
+    //读取缓存内容，并根据相应的格式返回缓存的数据格式
+    return [NSKeyedUnarchiver unarchiveObjectWithData:[self getField:@"cacheData"]];
+}
+
+#pragma mark - 清空数据表
+
+/**
+ *  清空数据表
+ *
+ *  @param tableName 表名
+ */
+-(void)truncateTableWithTableName:(NSString *)tableName{
+    [self deleteTableWithDict:nil :tableName];
+}
+/**
+ *  公共删除方法
+ *
+ *  @param dict 字典
+ */
+-(void)deleteTableWithDict:(NSDictionary *)dict : (NSString *)tableName{
+    //重置查询条件
+    [self clean];
+    //选择要操作的表名
+    [self setCurrentTableName:tableName];
+    //查询数据库是否存在当前待更新的数据源
+    [self whereWithDict:dict];
+    if ([[self find] count]>0) {
+        //存在则删除,dict 为空代表清空整个表
+        dict==nil ? [self delete:@"1"]:[self delete:dict];
+    }
+    //打印sql
+    //NSLog(@"currentSql:%@",self.lastSql);
+}
+
+#pragma mark - 数据表是否为空
+/**
+ *  数据表是否为空
+ *
+ *  @param tableName 数据库表名
+ *
+ *  @return bool类型值 YES =为空， NO = 不为空
+ */
+-(BOOL)isEmptyWithTableName:(NSString *)tableName{
+    //重置查询条件
+    [self clean];
+    //选择要操作的表名
+    [self setCurrentTableName:tableName];
+    return [[self find] count]==0;
+}
+
+#pragma mark - 数据表展示
+/**
+ *  展示Table数据
+ *
+ *  @param fields    字段，（多个字段半角逗号隔开）
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithFields:(NSString *)fields andPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andTableName:(NSString *)tableName{
+    return [self showTableWithFields:fields andPages:page andPageSize:pagesize andOrder:nil andTableName:tableName];
+}
+/**
+ *  展示Table数据
+ *
+ *  @param page     当前页
+ *  @param pagesize 分页大小
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andTableName:(NSString *)tableName{
+    return [self showTableWithFields:nil andPages:page andPageSize:pagesize andOrder:nil andTableName:tableName];
+}
 
 
+/**
+ *  展示Table数据
+ *
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param order     排序
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order andTableName:(NSString *)tableName{
+    return [self showTableWithFields:nil andPages:page andPageSize:pagesize andOrder:order andTableName:tableName];
+}
+
+/**
+ *  展示Table数据
+ *
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param order     排序
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithFields:(NSString *)fields andPages:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order andTableName:(NSString *)tableName{
+    //重置查询条件
+    [self clean];
+    //选择要操作的表名
+    [self setCurrentTableName:tableName];
+    int startNum = page<=0 ? 0:(int)((page -1)*pagesize);
+    int endNum = (int)(page*pagesize);
+    //limit条件
+    [self limitWithStart:startNum End:endNum];
+    //field条件
+    if (![fields isEqual:nil]) {
+        [self fieldsWithString:fields];
+    }
+    //order条件
+    if (![order isEqual:nil]) {
+        [self setOrder:order];
+    }
+    //select查询
+    NSArray *result = [self select];
+    return result;
+    
+}
+#pragma mark - 索引操作
+/**
+ *  为字段创建普通索引
+ *
+ *  @param field     字段名称
+ *  @param tableName 表名
+ *
+ *  @return 执行是否成功
+ */
+-(bool)createIndexWithField:(NSString *)field andTableName:(NSString *)tableName{
+    __block NSMutableString *sql = [NSMutableString stringWithFormat:@"CREATE INDEX IF NOT EXISTS %@ ON %@%@(%@)",field,_prefix,tableName,field];
+    _lastSql = sql;
+    return [self excuteUpdateWithSql:sql];
+}
 @end
