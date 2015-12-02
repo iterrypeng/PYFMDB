@@ -1,6 +1,6 @@
 language: objective-c
 xcode_project: pyfmdbdemo/pyfmdbdemo.xcodeproj
-xcode_scheme: pyfmdbTests
+xcode_scheme: pyfmdbdemoTests
 before_install:
     - mkdir -p "pyfmdbdemo/pyfmdbdemo.xcodeproj/xcshareddata/xcschemes" && cp pyfmdbdemo/pyfmdbdemoTests/Schemes/*.xcscheme "pyfmdbdemo/pyfmdbdemo.xcodeproj/xcshareddata/xcschemes/"
 
