@@ -6,8 +6,9 @@ Pod::Spec.new do |s|
   s.license      = "MIT"
   s.author       = { "pengyong" => "pengyong@veldasoft.com" }
   s.platform     = :ios
-  s.source       = { :git => "https://github.com/iterrypeng/PYFMDB.git", :tag => "0.0.1" }
-  s.source_files = "PYFMDB/PYFMDB.{h,m}"
+  s.source       = { :git => "https://github.com/iterrypeng/PYFMDB.git", :tag => s.version.to_s }
+  s.source_files = "PYFMDB/*.{h,m}"
+  s.platform	 = :ios,'6.0'
   s.requires_arc = true
   s.dependency   "FMDB", "~> 2.0"
 end
