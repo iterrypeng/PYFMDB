@@ -145,7 +145,9 @@
 -(void)deleteWithWhere:(NSString *)where{
     [self.db clean];
     [self.db setCurrentTableName:self.tableName];
-    [self.db whereWithString:where];
+    if (![where isEqual:nil]) {
+         [self.db whereWithString:where];
+    }
     [self.db delete];
 }
 #pragma mark - 查询
@@ -156,7 +158,10 @@
 -(NSDictionary *)findWithWhere:(NSString *)where{
     [self.db clean];
     [self.db setCurrentTableName:self.tableName];
-    [self.db whereWithString:where];
+    if (![where isEqual:nil]) {
+         [self.db whereWithString:where];
+    }
+    [self.db fieldsWithString:self.structure.fieldsString];
     return [self.db find];
 }
 

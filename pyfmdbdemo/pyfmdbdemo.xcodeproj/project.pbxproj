@@ -23,7 +23,18 @@
 		DEB182131C0EAB0400A9F587 /* PYTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182121C0EAB0400A9F587 /* PYTable.m */; };
 		DEB182161C0EABC100A9F587 /* PYStructure.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182151C0EABC100A9F587 /* PYStructure.m */; };
 		DEB182191C0F33F500A9F587 /* CarTable.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182181C0F33F500A9F587 /* CarTable.m */; };
+		DEB182211C0F855300A9F587 /* pyfmdbdemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB182201C0F855300A9F587 /* pyfmdbdemoTests.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DEB182231C0F855300A9F587 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56C7F2671BE8D5900054E946 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56C7F26E1BE8D5900054E946;
+			remoteInfo = pyfmdbdemo;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		56C7F26F1BE8D5900054E946 /* pyfmdbdemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pyfmdbdemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +67,9 @@
 		DEB182151C0EABC100A9F587 /* PYStructure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PYStructure.m; sourceTree = "<group>"; };
 		DEB182171C0F33F500A9F587 /* CarTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CarTable.h; sourceTree = "<group>"; };
 		DEB182181C0F33F500A9F587 /* CarTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CarTable.m; sourceTree = "<group>"; };
+		DEB1821E1C0F855300A9F587 /* pyfmdbdemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = pyfmdbdemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEB182201C0F855300A9F587 /* pyfmdbdemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = pyfmdbdemoTests.m; sourceTree = "<group>"; };
+		DEB182221C0F855300A9F587 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +78,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				56C7F2A11BE8D7120054E946 /* libsqlite3.0.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEB1821B1C0F855300A9F587 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +98,7 @@
 				56C7F2891BE8D5F00054E946 /* FMDB */,
 				56C7F2951BE8D5F00054E946 /* PYFMDB */,
 				56C7F2711BE8D5900054E946 /* pyfmdbdemo */,
+				DEB1821F1C0F855300A9F587 /* pyfmdbdemoTests */,
 				56C7F2701BE8D5900054E946 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				56C7F26F1BE8D5900054E946 /* pyfmdbdemo.app */,
+				DEB1821E1C0F855300A9F587 /* pyfmdbdemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,6 +169,15 @@
 			path = PYFMDB;
 			sourceTree = "<group>";
 		};
+		DEB1821F1C0F855300A9F587 /* pyfmdbdemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				DEB182201C0F855300A9F587 /* pyfmdbdemoTests.m */,
+				DEB182221C0F855300A9F587 /* Info.plist */,
+			);
+			path = pyfmdbdemoTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -166,6 +198,24 @@
 			productReference = 56C7F26F1BE8D5900054E946 /* pyfmdbdemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DEB1821D1C0F855300A9F587 /* pyfmdbdemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEB182271C0F855300A9F587 /* Build configuration list for PBXNativeTarget "pyfmdbdemoTests" */;
+			buildPhases = (
+				DEB1821A1C0F855300A9F587 /* Sources */,
+				DEB1821B1C0F855300A9F587 /* Frameworks */,
+				DEB1821C1C0F855300A9F587 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DEB182241C0F855300A9F587 /* PBXTargetDependency */,
+			);
+			name = pyfmdbdemoTests;
+			productName = pyfmdbdemoTests;
+			productReference = DEB1821E1C0F855300A9F587 /* pyfmdbdemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -177,6 +227,10 @@
 				TargetAttributes = {
 					56C7F26E1BE8D5900054E946 = {
 						CreatedOnToolsVersion = 7.1;
+					};
+					DEB1821D1C0F855300A9F587 = {
+						CreatedOnToolsVersion = 7.1.1;
+						TestTargetID = 56C7F26E1BE8D5900054E946;
 					};
 				};
 			};
@@ -194,6 +248,7 @@
 			projectRoot = "";
 			targets = (
 				56C7F26E1BE8D5900054E946 /* pyfmdbdemo */,
+				DEB1821D1C0F855300A9F587 /* pyfmdbdemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -206,6 +261,13 @@
 				56C7F2821BE8D5900054E946 /* LaunchScreen.storyboard in Resources */,
 				56C7F27F1BE8D5900054E946 /* Assets.xcassets in Resources */,
 				56C7F27D1BE8D5900054E946 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEB1821C1C0F855300A9F587 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,7 +293,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DEB1821A1C0F855300A9F587 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DEB182211C0F855300A9F587 /* pyfmdbdemoTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DEB182241C0F855300A9F587 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56C7F26E1BE8D5900054E946 /* pyfmdbdemo */;
+			targetProxy = DEB182231C0F855300A9F587 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		56C7F27B1BE8D5900054E946 /* Main.storyboard */ = {
@@ -355,6 +433,30 @@
 			};
 			name = Release;
 		};
+		DEB182251C0F855300A9F587 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = pyfmdbdemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.velda.pyfmdbdemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/pyfmdbdemo.app/pyfmdbdemo";
+			};
+			name = Debug;
+		};
+		DEB182261C0F855300A9F587 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = pyfmdbdemoTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cn.velda.pyfmdbdemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/pyfmdbdemo.app/pyfmdbdemo";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -375,6 +477,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		DEB182271C0F855300A9F587 /* Build configuration list for PBXNativeTarget "pyfmdbdemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEB182251C0F855300A9F587 /* Debug */,
+				DEB182261C0F855300A9F587 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
