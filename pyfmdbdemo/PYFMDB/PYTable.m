@@ -20,9 +20,11 @@
             [self.db createTableWithDict:self.structure.structureDictory :self.tableName];
         }
         //创建索引
-        [self.indexes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [self.db createIndexWithField:obj andTableName:self.tableName];
-        }];
+        if (self.indexes.count >0) {
+            for (NSString *index in self.indexes) {
+                [self.db createIndexWithField:index andTableName:self.tableName];
+            }
+        }
     }
     return self;
 }
