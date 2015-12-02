@@ -161,7 +161,7 @@
 }
 
 -(NSArray *)selectWithWhere:(NSString *)where{
-    return [self selectWithWhere:where andFields:nil andPage:0 andPageSize:0 andOrder:nil];
+    return [self selectWithWhere:where andFields:self.structure.fieldsString andPage:0 andPageSize:0 andOrder:nil];
 }
 -(NSArray *)selectAll{
     return [self selectWithWhere:@"1"];

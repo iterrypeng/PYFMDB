@@ -19,9 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"%@",self.table.structure.fieldsString);
-    NSLog(@"table count:%lu",(unsigned long)[self.table count]);
-    NSLog(@"sql:%@",self.table.lastSql);
 }
 
 
@@ -60,7 +57,8 @@
 }
 
 - (IBAction)query {
-    NSArray *result = [self.table selectWithWhere:nil andFields:@"*" andPage:1 andPageSize:5 andOrder:@"id desc"];
+   // NSArray *result = [self.table selectWithWhere:nil andFields:@"*" andPage:1 andPageSize:5 andOrder:@"id desc"];
+    NSArray *result = [self.table selectAll];
     NSLog(@"%@",result);
     NSLog(@"lastsql:%@",self.table.lastSql);
     

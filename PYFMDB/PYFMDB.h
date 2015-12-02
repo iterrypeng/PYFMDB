@@ -354,20 +354,110 @@
  */
 -(instancetype)reset;
 /**
- *  根据缓存ID将数据源缓存
+ *  重写order get方法
+ *
+ *  @return 要排序的条件
+ */
+- (NSString *)order;
+/**
+ *  设置order条件
+ *
+ *  @param order order条件
+ */
+-(void)setOrder:(NSString *)order;
+/**
+ *  数据表是否为空
+ *
+ *  @param tableName 数据库表名
+ *
+ *  @return bool类型值 YES =为空， NO = 不为空
+ */
+-(BOOL)isEmptyWithTableName:(NSString *)tableName;
+/**
+ *  清空数据表
+ *
+ *  @param tableName 表名
+ */
+-(void)truncateTableWithTableName:(NSString *)tableName;
+/**
+ *  公共删除方法
+ *
+ *  @param dict 字典
+ */
+-(void)deleteTableWithDict:(NSDictionary *)dict : (NSString *)tableName;
+/**
+ *  展示Table数据
+ *
+ *  @param page     当前页
+ *  @param pagesize 分页大小
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andTableName:(NSString *)tableName;
+/**
+ *  展示Table数据
+ *
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param order     排序
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order andTableName:(NSString *)tableName;
+
+/**
+ *  展示Table数据
+ *
+ *  @param fields    字段，（多个字段半角逗号隔开）
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithFields:(NSString *)fields andPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andTableName:(NSString *)tableName;
+
+
+/**
+ *  展示Table数据
+ *
+ *  @param fields    字段，（多个字段半角逗号隔开）
+ *  @param page      当前页
+ *  @param pagesize  分页大小
+ *  @param order     排序
+ *  @param tableName 表名
+ *
+ *  @return 数组
+ */
+-(NSArray *)showTableWithFields:(NSString *)fields andPages:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order andTableName:(NSString *)tableName;
+#pragma mark - cache 缓存处理方法
+/**
+ *  将数据缓存入文件
  *
  *  @param data     数据源
- *  @param cacheID 缓存ID
+ *  @param cacheKey 缓存键名
  *
- *  @return 是否缓存成功
+ *  @return 是否成功缓存
  */
--(BOOL)cacheWithData:(id)data ForCacheID:(NSString *)cacheID;
+-(BOOL)setObject:(id)data ForCacheKey:(NSString *)cacheKey;
 /**
- *  根据缓存ID拿去数据源
+ *  根据缓存键名读取缓存内容
  *
- *  @param cacheID 缓存ID
+ *  @param cacheKey 缓存键名
  *
- *  @return 数据源数据
+ *  @return 缓存键值
  */
--(id)cacheFromCacheID:(NSString *)cacheID;
+- (id )objectForCacheKey:(NSString *)cacheKey;
+#pragma mark - 索引操作
+/**
+ *  为字段创建普通索引
+ *
+ *  @param field     字段名称
+ *  @param tableName 表名
+ *
+ *  @return 执行是否成功
+ */
+-(bool)createIndexWithField:(NSString *)field andTableName: (NSString *)tableName;
 @end
