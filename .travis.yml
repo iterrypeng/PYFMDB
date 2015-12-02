@@ -1,3 +1,6 @@
-language: objective-c 
-script:
- - xctool -project pyfmdbdemo/pyfmdbdemo.xcodeproj -scheme pyfmdbdemo -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+language: objective-c
+xcode_project: pyfmdbdemo/pyfmdbdemo.xcodeproj
+xcode_scheme: pyfmdbTests
+before_install:
+    - mkdir -p "pyfmdbdemo/pyfmdbdemo.xcodeproj/xcshareddata/xcschemes" && cp pyfmdbdemo/pyfmdbdemoTests/Schemes/*.xcscheme "pyfmdbdemo/pyfmdbdemo.xcodeproj/xcshareddata/xcschemes/"
+
