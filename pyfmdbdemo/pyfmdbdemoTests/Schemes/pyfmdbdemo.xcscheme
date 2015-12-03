@@ -9,14 +9,14 @@
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DEB1821D1C0F855300A9F587"
-               BuildableName = "pyfmdbdemoTests.xctest"
-               BlueprintName = "pyfmdbdemoTests"
+               BlueprintIdentifier = "56C7F26E1BE8D5900054E946"
+               BuildableName = "pyfmdbdemo.app"
+               BlueprintName = "pyfmdbdemo"
                ReferencedContainer = "container:pyfmdbdemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -53,14 +53,24 @@
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "56C7F26E1BE8D5900054E946"
+            BuildableName = "pyfmdbdemo.app"
+            BlueprintName = "pyfmdbdemo"
+            ReferencedContainer = "container:pyfmdbdemo.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -70,15 +80,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DEB1821D1C0F855300A9F587"
-            BuildableName = "pyfmdbdemoTests.xctest"
-            BlueprintName = "pyfmdbdemoTests"
+            BlueprintIdentifier = "56C7F26E1BE8D5900054E946"
+            BuildableName = "pyfmdbdemo.app"
+            BlueprintName = "pyfmdbdemo"
             ReferencedContainer = "container:pyfmdbdemo.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
