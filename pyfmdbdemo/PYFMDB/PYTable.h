@@ -58,6 +58,10 @@
 
 -(void)addFields:(NSDictionary *)fields;
 
+-(void)addFieldsIfNotExist:(NSDictionary *)fields;
+
+-(void)addOrUpdateFields:(NSDictionary *)fields andWhere:(NSString *)where;
+
 #pragma mark - 更新数据
 -(void)updateFields:(NSDictionary *)fields andWhere:(NSString *)where;
 
@@ -83,5 +87,10 @@
 -(NSArray *)selectWithWhere:(NSString *)where andFields:(NSString *)fields andPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize;
 
 -(NSArray *)selectWithWhere:(NSString *)where andFields:(NSString *)fields andPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order;
+
+
+-(BOOL)hasWhere:(NSString *)where;
+
+-(BOOL)hasFields:(NSDictionary *)fields;
 
 @end
