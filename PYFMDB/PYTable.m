@@ -20,9 +20,11 @@
             [self.db createTableWithDict:self.structure.structureDictory :self.tableName];
         }
         //创建索引
-        [self.indexes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [self.db createIndexWithField:obj andTableName:self.tableName];
-        }];
+        if (self.indexes.count >0) {
+            for (NSString *index in self.indexes) {
+                [self.db createIndexWithField:index andTableName:self.tableName];
+            }
+        }
     }
     return self;
 }
@@ -145,7 +147,9 @@
 -(void)deleteWithWhere:(NSString *)where{
     [self.db clean];
     [self.db setCurrentTableName:self.tableName];
-    [self.db whereWithString:where];
+    if (![where isEqual:nil]) {
+         [self.db whereWithString:where];
+    }
     [self.db delete];
 }
 #pragma mark - 查询
@@ -156,7 +160,10 @@
 -(NSDictionary *)findWithWhere:(NSString *)where{
     [self.db clean];
     [self.db setCurrentTableName:self.tableName];
-    [self.db whereWithString:where];
+    if (![where isEqual:nil]) {
+         [self.db whereWithString:where];
+    }
+    [self.db fieldsWithString:self.structure.fieldsString];
     return [self.db find];
 }
 

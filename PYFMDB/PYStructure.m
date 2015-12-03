@@ -30,10 +30,10 @@
 }
 
 -(NSDictionary *)structureDictory{
-    __block NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [self.structureArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [dict addEntriesFromDictionary:obj];
-    }];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    for (NSDictionary *dic in self.structureArray) {
+        [dict addEntriesFromDictionary:dic];
+    }
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 
@@ -50,15 +50,15 @@
     return [[self structureDictory] allKeys];
 }
 -(NSString *)fieldsString{
-   __block NSString *fields = nil;
-    [self.fieldsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSString *fields = nil;
+    for (NSString *obj in self.fieldsArray) {
         if (fields==nil) {
             fields = obj;
         }
         else{
             fields = [NSString stringWithFormat:@"%@,%@",fields,obj];
         }
-    }];
+    }
     return fields;
 }
 @end
