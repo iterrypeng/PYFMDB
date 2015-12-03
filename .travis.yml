@@ -4,4 +4,5 @@ xcode_project: pyfmdbdemo/pyfmdbdemo.xcodeproj
 xcode_scheme: pyfmdbdemo
 before_install:
     - mkdir -p "pyfmdbdemo/pyfmdbdemo.xcodeproj/xcshareddata/xcschemes" && cp pyfmdbdemo/pyfmdbdemoTests/Schemes/*.xcscheme "pyfmdbdemo/pyfmdbdemo.xcodeproj/xcshareddata/xcschemes/"
-script:xctool -project pyfmdbdemo/pyfmdbdemo.xcodeproj -scheme pyfmdbdemo  build  CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+script:
+ - xctool -project pyfmdbdemo/pyfmdbdemo.xcodeproj -scheme pyfmdbdemo  ONLY_ACTIVE_ARCH=NO CODE_SIGNING_REQUIRED=NO
