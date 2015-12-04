@@ -7,6 +7,7 @@ PYFMDB
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
+[![Github All Releases](https://img.shields.io/github/downloads/iterrypeng/PYFMDB/total.svg)]()
 ##Other Languages
 [简体中文](README_ZH.md) [繁体中文](README_TW.md)
 ## Intro
