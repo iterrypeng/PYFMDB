@@ -8,7 +8,7 @@ PYFMDB
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
-##More Version
+##More Versions
 * [简体中文](README_ZH.md) 
 * [繁体中文](README_TW.md)
 
@@ -197,7 +197,7 @@ NSLog(@"table fields:%@",table.structure.fieldsString);
 
 ## Contact
 
-Follow and contact me by Email. If you find an issue, just [open a ticket](https://github.com/iterrypeng/PYFMDB/issues/new) on it. Pull requests are warmly welcome as well.
+If you find an issue, just [open a ticket](https://github.com/iterrypeng/PYFMDB/issues/new) on it. Pull requests are warmly welcome as well.
 
 ## License
 
