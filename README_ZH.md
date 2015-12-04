@@ -41,7 +41,12 @@ PYFMDB
     return st;
 }
 ```
-`PYStructureType`是定义的结构体，PYStructureTypeAutoInc 代表自增类型字段，PYStructureTypeNormalText 代表普通文本字段，PYStructureTypeNormalInt 代表普通int类型字段
+#####`PYStructureType`
+* PYStructureTypeAutoInc = 0,//主键，int类型，自增
+* PYStructureTypePrimaryInt = 1,//主键，int类型，自增
+* PYStructureTypePrimaryText = 2,//主键，text类型
+* PYStructureTypeNormalInt = 3,//普通列，int类型
+* PYStructureTypeNormalText = 4,//普通列，text类型
 ###3.自定义Table类的使用
 table类可以实现针对当前table的增删改查数据库操作。
 ```
@@ -156,6 +161,19 @@ if([table isEmpty]){
         //有查询结果
     }
 ```
+####原生sql支持
+执行一个sql查询
+```
+ NSString *sql = @"select * from car";
+ NSArray *results = [table executeQueryWithSql:sql]; 
+```
+执行一个sql操作，如更新，删除，插入等
+```
+ NSString *sql = @"delete from car where name='BMW'";
+ BOOL result = [table executeUpdateWithSql:sql];
+```
+
+
 
 ####调试信息
 ```
