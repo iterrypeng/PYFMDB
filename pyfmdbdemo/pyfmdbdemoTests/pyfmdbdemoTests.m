@@ -23,25 +23,51 @@
     return _table;
 }
 
--(void)testInsert{
-    NSDictionary *fields = @{@"name":@"test",@"wheels":@1};
+-(void)add{
+    NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
     [self.table addFields:fields];
+}
+
+-(void)delete{
+    [self.table deleteWithWhere:@"name='BMW'"];
+}
+
+-(void)testInsert{
+    [self add];
     BOOL valid = [self.table count]==1 ? YES :NO;
     XCTAssertTrue(valid);
 }
 
+-(void)testAddOrUpdate{
+    [self add];
+     NSDictionary *fields = @{@"name":@"MINI",@"wheels":@1};
+    [self.table addOrUpdateFields:fields andWhere:@"name='MINI'"];
+    BOOL valid1 = [self.table count]==2 ? YES :NO;
+    [self.table addOrUpdateFields:fields andWhere:@"name='BMW'"];
+    BOOL valid2 = [self.table count]==2 && ![self.table hasFields: @{@"name":@"BMW",@"wheels":@1}] ? YES :NO;
+    XCTAssertTrue(valid1 && valid2);
+}
+
+-(void)testAddOrIgnore{
+    [self add];
+    NSDictionary *fields = @{@"name":@"MINI",@"wheels":@1};
+    [self.table addFieldsIfNotExist:fields];
+    BOOL valid1 = [self.table count]==2 ? YES :NO;
+    [self.table addFieldsIfNotExist:@{@"name":@"BMW",@"wheels":@1}];
+    BOOL valid2 = [self.table count]==2 ? YES :NO;
+    XCTAssertTrue(valid1 && valid2);
+}
+
 -(void)testDelete{
-    NSDictionary *fields = @{@"name":@"test",@"wheels":@1};
-    [self.table addFields:fields];
-    [self.table deleteWithWhere:@"name='test'"];
+    [self add];
+    [self delete];
     BOOL valid = [self.table count]==0 ? YES :NO;
      XCTAssertTrue(valid);
 }
 
 -(void)testSelect{
     for (int i=0; i<30; i++) {
-        NSDictionary *fields = @{@"name":@"test",@"wheels":[NSNumber numberWithInt:i]};
-        [self.table addFields:fields];
+        [self add];
     }
     NSArray *result = [self.table selectAll];
     BOOL valid = [result count]==30 ? YES :NO;
@@ -49,11 +75,23 @@
 }
 
 -(void)testUpdate{
-    NSDictionary *fields = @{@"name":@"test",@"wheels":@1};
-    [self.table addFields:fields];
-    [self.table updateFields:@{@"name":@"test2"} andWhere:@"name='test'"];
+    [self add];
+    [self.table updateFields:@{@"name":@"MINI"} andWhere:@"name='BMW'"];
      NSString *field = (NSString *)[self.table getField:@"name" andWhere:nil];
-    XCTAssertTrue([field isEqualToString:@"test2"]);
+    XCTAssertTrue([field isEqualToString:@"MINI"]);
 }
+
+-(void)testHasWhere{
+    [self add];
+    XCTAssertTrue([self.table hasWhere:@"name='BMW'"]);
+}
+
+-(void)testHasFields{
+    [self add];
+    NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
+    XCTAssert([self.table hasFields:fields]);
+}
+
+
 
 @end
