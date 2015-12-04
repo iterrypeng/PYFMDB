@@ -92,6 +92,16 @@
     XCTAssert([self.table hasFields:fields]);
 }
 
+-(void)testExecuteQuery{
+    [self add];
+    NSString *sql = @"select * from car";
+    XCTAssert([[self.table executeQueryWithSql:sql] count] ==1);
+}
 
+-(void)testExecuteUpdate{
+    [self add];
+    NSString *sql = @"delete from car where name='BMW'";
+    XCTAssert([self.table executeUpdateWithSql:sql]);
+}
 
 @end

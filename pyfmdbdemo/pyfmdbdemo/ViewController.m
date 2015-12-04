@@ -32,7 +32,7 @@
 - (IBAction)add {
     for (int i=0; i<10; i++) {
         NSDictionary *data = @{
-                               @"name":@"Audio",
+                               @"name":@"MINI",
                                @"wheels":@4 ,
                                };
         [self.table addFields:data];

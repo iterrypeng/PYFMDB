@@ -7,9 +7,9 @@
 //
 
 #import "PYTable.h"
-#define PYTablePrefixUserDefaultKey @"uid"
-#define PYTablePrefixBeforeKey @"u"
-#define PYTablePrefixAfterKey @"_"
+#define PYTablePrefixUserDefaultKey @"PYFMDBKEY"
+#define PYTablePrefixBeforeKey @""
+#define PYTablePrefixAfterKey @""
 #define PYDataBaseName @"pyfmdb.sqlite"
 @class PYFMDB;
 @implementation PYTable
@@ -222,5 +222,17 @@
     [self.db whereWithDict:fields];
     return [[self.db queryCount] intValue] >0;
 }
+
+
+#pragma mark - origin sql
+-(NSArray *)executeQueryWithSql:(NSString *)sql{
+    return [self.db excuteQueryWithSql:sql];
+}
+
+-(BOOL)executeUpdateWithSql:(NSString *)sql{
+    return [self.db excuteUpdateWithSql:sql];
+}
+
+
 @end
 
