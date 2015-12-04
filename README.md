@@ -13,7 +13,7 @@ PYFMDB
 PYFMDB base on FMDB, it is an simple ORM!
 The package has three parts，`PYFMDB` support for base CURD，`PYTable` support for init database,table,indexes，and has simple methods for CURD,`PYStructure` define the table's structure.
 ##Quick Getting Started
-###1.Import PYFMDB
+###Import PYFMDB
 #### CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
@@ -26,7 +26,7 @@ pod 'PYFMDB'
 You can copy the dirs `PYFMDB`,`FMDB` into your project, find the setting  option  `Link Binary With Libraries` and add `libsqlite3.dylib` into it like this:
 ![](http://blog.devtang.com/images/key-value-store-setup.jpg)
 
-###2.Create Table
+###Create Table
 Create Table extends `PYTable`，In the demo project, I have named it "CarTable"
 #### Set TableName
 The codes from CarTable.m  below:
@@ -53,7 +53,7 @@ The codes from CarTable.m  below:
 * PYStructureTypeNormalInt = 3,//COMMON COLUMN KEY INT
 * PYStructureTypeNormalText = 4,//COMMON COLUMN KEY TEXT
 
-###3.CURD and Others
+###CURD and Others
 init Table
 ```
 CarTable *table = [[CarTable alloc] init];
