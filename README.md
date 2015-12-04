@@ -8,13 +8,18 @@ PYFMDB
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
-##Other Languages
+##Other Languages Version
 * [简体中文](README_ZH.md) 
 * [繁体中文](README_TW.md)
 
 ## Intro
-PYFMDB base on FMDB, it is an simple ORM!
-The package has three parts，`PYFMDB` support for base CURD，`PYTable` support for init database,table,indexes，and has simple methods for CURD,`PYStructure` define the table's structure.
+PYFMDB base on FMDB, it is a simple ORM!
+
+The package has three parts
+* `PYFMDB`  ORM base on FMDB
+* `PYTable` Init database,Create table，simple CURD methods 
+* `PYStructure` Define the table's structure
+
 ##Quick Getting Started
 ###Import PYFMDB
 #### CocoaPods
@@ -25,21 +30,23 @@ To integrate PYFMDB into your Xcode project using CocoaPods, specify it in your 
 ``` ruby
 pod 'PYFMDB'
 ```
-#### By Hands
-You can copy the dirs `PYFMDB`,`FMDB` into your project, find the setting  option  `Link Binary With Libraries` and add `libsqlite3.dylib` into it like this:
+#### By Hand
+Copy the dirs `PYFMDB`,`FMDB` into your project
+
+Search the build-setting  option  `Link Binary With Libraries` and add `libsqlite3.dylib` into it like this
 ![](http://blog.devtang.com/images/key-value-store-setup.jpg)
 
 ###Create Table
 Create Table extends `PYTable`，In the demo project, I have named it "CarTable"
 #### Set TableName
-The codes from CarTable.m  below:
+The codes from CarTable.m  below
 ```
 -(NSString *)tableName{
     return @"car";
 }
 ```
 #### Set Table structure
-The codes from CarTable.m  below:
+The codes from CarTable.m  below
 ```
 -(PYStructure *)structure{
     PYStructure * st = [[PYStructure alloc] init];
@@ -56,39 +63,39 @@ The codes from CarTable.m  below:
 * PYStructureTypeNormalInt = 3,//COMMON COLUMN KEY INT
 * PYStructureTypeNormalText = 4,//COMMON COLUMN KEY TEXT
 
-###CURD and Others
-init Table
+###Table methods
+Init Table
 ```
 CarTable *table = [[CarTable alloc] init];
 ```
 ####Create 
-insert fields into the Table
+Insert fields into the Table
 ```
 NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1}; 
 [table addFields:fields];
 ```
-if the table has the fields，then  do update; if not, then do add;
+If the table has the fields，then  do update; otherwise,  do create;
 ```
 NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
 [table addOrUpdateFields:fields andWhere:@"name='BMW'"];
 ```
-if the table has the fields, then ignore; if not, then add;
+If the table has the fields, then ignore; otherwise, then add;
 ```
 NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
 [table addFieldsIfNotExist:fields];
 ```
 ####Delete
-set where with one condition for delete
+Set where with one condition for delete
 ```
 NSString *where = @"name='BMW'";
 [table deleteWithWhere:where];
 ```
-set where with conditions for delete
+Set where with conditions for delete
 ```
 NSString *where = @"name='BMW' and id >=5";
 [table deleteWithWhere:where];
 ```
-truncate the Table
+Truncate the Table
 ```
 [table truncate];
 ```
@@ -104,46 +111,41 @@ Update one field
 [table setField:@"name" andValue:@"BMW" andWhere:@"name='MINI'"];
 ```
 ####Read
-all lines，all fields 
+All lines，all fields 
 ```
 NSArray *results = [table selectAll];
 ```
-where conditions，all fields
+Where conditions，all fields
 ```
  NSString *where = @"name='BMW'";
  NSArray *results = [table selectWithWhere:where];
 ```
-where conditions，some of the fields
+Where conditions，some of the fields
 ```
  NSString *where = @"name='BMW'";
  NSString *fields = @"id,wheels";
  NSArray *results = [table selectWithWhere:where andFields:fields];
 ```
-where conditions，some of the fields，paging
+Where conditions，some of the fields，paging
 ```
  NSString *where = @"name='BMW'";
  NSString *fields = @"id,wheels";
  //NSString *fields = @"*";//all fields 
 NSArray *results = [table selectWithWhere:where andFields:fields andPage:1 andPageSize:10];//first page，pagesize=10
 ```
-where conditions，some of the fields，paging，ordering
-
-ordering has "asc","desc"
-
-one field order: id desc
-
-some fields order: id,wheel asc
+Where conditions，some of the fields，paging，ordering
 ```
  NSString *where = @"name='BMW'";
  NSString *fields = @"id,wheels";
+ //ordering has "asc","desc";one field order: id desc;some fields order: id,wheel asc
 NSArray *results = [table selectWithWhere:where andFields:fields andPage:1 andPageSize:10 andOrder:@"id desc"];
 ```
-find one line fields
+Find one line fields
 ```
  NSString *where = @"name='BMW'";
  NSDictionary *result = [table findWithWhere:where];
 ```
-find one field
+Find one field
 ```
 id result = [table getField:@"name" andWhere:@"id=1"];
 ```
@@ -172,12 +174,12 @@ if([table isEmpty]){
 ```
 
 ####Origin Sql Support
-execute query sql
+Execute query sql
 ```
  NSString *sql = @"select * from car";
  NSArray *results = [table executeQueryWithSql:sql]; 
 ```
-execute update sql
+Execute update sql
 ```
  NSString *sql = @"delete from car where name='BMW'";
  BOOL result = [table executeUpdateWithSql:sql];
