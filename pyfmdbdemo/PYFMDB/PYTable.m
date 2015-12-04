@@ -15,11 +15,11 @@
 @implementation PYTable
 -(instancetype)init{
     if (self = [super init]) {
-        //创建表
+        //create the table
         if (![self.structure.structureDictory isEqual:nil]) {
             [self.db createTableWithDict:self.structure.structureDictory :self.tableName];
         }
-        //创建索引
+        //create indexes
         if (self.indexes.count >0) {
             for (NSString *index in self.indexes) {
                 [self.db createIndexWithField:index andTableName:self.tableName];
@@ -29,18 +29,12 @@
     return self;
 }
 
-/**
- *  db初始化
- *
- *  @return PYFMDB数据库对象
- */
+
 -(PYFMDB *)db{
     if (_db) {
         return _db;
     }
-    //初始化数据库表
     _db = [PYFMDB dbWithDbName:self.databaseName];
-    //设置数据库表前缀为用户id
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *userID = [userDefaults objectForKey:self.prefixUserDefaultKey];
     _db.prefix = userID==nil ? [NSString stringWithFormat:@"%@%@",self.prefixBeforeKey,self.prefixAfterKey]:[NSString stringWithFormat:@"%@%@%@",self.prefixBeforeKey,userID,self.prefixAfterKey];
@@ -86,29 +80,17 @@
     _structure = [[PYStructure alloc] init];
     return _structure;
 }
-/**
- *  清空数据表
- */
+
 -(void)truncate{
     [self.db truncateTableWithTableName:self.tableName];
 }
-/**
- *  总数据量
- *
- */
+
 -(NSUInteger)count{
-    //重置查询条件
     [self.db clean];
-    //选择要操作的表名
     [self.db setCurrentTableName:self.tableName];
     return [[self.db select] count];
 }
 
-/**
- *  数据表是否为空
- *
- *  @return true= 为空 false = 不为空
- */
 -(BOOL)isEmpty{
     if ([self count] >0) {
         return false;
@@ -124,7 +106,7 @@
     return self.db.dbPath;
 }
 
-#pragma mark - 新增数据
+#pragma mark - create
 
 -(void)addFields:(NSDictionary *)fields{
     [self.db clean];
@@ -142,7 +124,7 @@
     [self hasWhere:where] ? [self updateFields:fields andWhere:where]: [self addFields:fields];
 }
 
-#pragma mark - 修改数据
+#pragma mark - update
 -(void)updateFields:(NSDictionary *)fields andWhere:(NSString *)where{
     [self.db clean];
     [self.db setCurrentTableName:self.tableName];
@@ -153,7 +135,7 @@
     [self updateFields:@{field:value} andWhere:where];
 }
 
-#pragma mark - 删除
+#pragma mark - delete
 -(void)deleteWithWhere:(NSString *)where{
     [self.db clean];
     [self.db setCurrentTableName:self.tableName];
@@ -162,7 +144,7 @@
     }
     [self.db delete];
 }
-#pragma mark - 查询
+#pragma mark - read
 -(id)getField:(NSString *)field andWhere:(NSString *)where{
     NSDictionary *find = [self findWithWhere:where];
     return [find objectForKey:field];
@@ -192,21 +174,21 @@
     return [self selectWithWhere:where andFields:fields andPage:page andPageSize:pagesize andOrder:nil];
 }
 -(NSArray *)selectWithWhere:(NSString *)where andFields:(NSString *)fields andPage:(NSUInteger)page andPageSize:(NSUInteger)pagesize andOrder:(NSString *)order{
-    //重置查询条件
+    //clean state
     [self.db clean];
-    //选择要操作的表名
+    //tablename
     [self.db setCurrentTableName:self.tableName];
     if (pagesize >0) {
         int startNum = page<=0 ? 0:(int)((page -1)*pagesize);
         int endNum = (int)(page*pagesize);
-        //limit条件
+        //limit
         [self.db limitWithStart:startNum End:endNum];
     }
-    //where条件
+    //where
     if (![where isEqual:nil]) {
        [self.db whereWithString:where];
     }
-    //field条件
+    //field
     if (![fields isEqual:nil]) {
         if ([fields isEqualToString:@"*"]) {
             [self.db fieldsWithString:self.structure.fieldsString];
@@ -218,12 +200,14 @@
     else{
         [self.db fieldsWithString:self.structure.fieldsString];
     }
-    //order条件
+    //order
     if (![order isEqual:nil]) {
         [self.db setOrder:order];
     }
     return  [self.db select];
 }
+
+#pragma mark - has
 
 -(BOOL)hasWhere:(NSString *)where{
     [self.db clean];

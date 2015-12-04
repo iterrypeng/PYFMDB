@@ -17,8 +17,8 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+-(void)printSql{
+    NSLog(@"sql:%@",self.table.lastSql);
 }
 
 
@@ -30,29 +30,27 @@
     return _table;
 }
 - (IBAction)add {
-    // 3 添加数据
     for (int i=0; i<10; i++) {
         NSDictionary *data = @{
-                               @"name":@"奥迪",
+                               @"name":@"Audio",
                                @"wheels":@4 ,
                                };
         [self.table addFields:data];
     }
-    NSLog(@"sql:%@",self.table.lastSql);
-    
+    [self printSql];
     NSLog(@"table count:%lu",(unsigned long)[self.table count]);
-     NSLog(@"sql:%@",self.table.lastSql);
+    [self printSql];
 }
 
 - (IBAction)update {
-    [self.table updateFields:@{@"name":@"奔驰"} andWhere:@"id > 2"];
-    NSLog(@"sql:%@",self.table.lastSql);
+    [self.table updateFields:@{@"name":@"BMW"} andWhere:@"id > 2"];
+    [self printSql];
 }
 
 - (IBAction)delete {
    
     [self.table deleteWithWhere:@"id>5"];
-    NSLog(@"sql:%@",self.table.lastSql);
+    [self printSql];
     
 }
 
@@ -60,7 +58,7 @@
    // NSArray *result = [self.table selectWithWhere:nil andFields:@"*" andPage:1 andPageSize:5 andOrder:@"id desc"];
     NSArray *result = [self.table selectAll];
     NSLog(@"%@",result);
-    NSLog(@"lastsql:%@",self.table.lastSql);
+    [self printSql];
     
 }
 

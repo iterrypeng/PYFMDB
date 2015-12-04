@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 typedef NS_ENUM(NSInteger, PYStructureType) {
-    PYStructureTypeAutoInc = 0,//自增键
-    PYStructureTypePrimaryInt = 1,//主键Int
-    PYStructureTypePrimaryText = 2,//主键Text
-    PYStructureTypeNormalInt = 3,//普通Int
-    PYStructureTypeNormalText = 4,//普通Text
+    PYStructureTypeAutoInc = 0,//AUTO INCREAMNT && PRIMARY KEY INT
+    PYStructureTypePrimaryInt = 1,//PRIMARY KEY INT
+    PYStructureTypePrimaryText = 2,//PRIMARY KEY TEXT
+    PYStructureTypeNormalInt = 3,//COMMON COLUMN KEY INT
+    PYStructureTypeNormalText = 4,//COMMON COLUMN KEY TEXT
 };
 @interface PYStructure : NSObject
 @property(nonatomic,strong)NSMutableArray *structureArray;
