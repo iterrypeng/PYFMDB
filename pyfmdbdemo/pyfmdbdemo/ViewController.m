@@ -19,18 +19,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.table truncate];
-    for (int i=0; i<30; i++) {
-        NSDictionary *fields = @{@"name":@"test",@"wheels":[NSNumber numberWithInt:i]};
-        [self.table addFields:fields];
-    }
-    
-    
-    [self.table updateFields:@{@"name":@"test2"} andWhere:@"name='test'"];
-    NSLog(@"lastsql:%@",self.table.lastSql);
-    NSString *field = (NSString *)[self.table getField:@"name" andWhere:nil];
-    NSLog(@"field:%@",field);
-    
 }
 
 
