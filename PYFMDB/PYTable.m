@@ -132,6 +132,16 @@
     [self.db add:fields];
 }
 
+-(void)addFieldsIfNotExist:(NSDictionary *)fields{
+    if (![self hasFields:fields]) {
+        [self addFields:fields];
+    }
+}
+
+-(void)addOrUpdateFields:(NSDictionary *)fields andWhere:(NSString *)where{
+    [self hasWhere:where] ? [self updateFields:fields andWhere:where]: [self addFields:fields];
+}
+
 #pragma mark - 修改数据
 -(void)updateFields:(NSDictionary *)fields andWhere:(NSString *)where{
     [self.db clean];
@@ -213,6 +223,20 @@
         [self.db setOrder:order];
     }
     return  [self.db select];
+}
+
+-(BOOL)hasWhere:(NSString *)where{
+    [self.db clean];
+    [self.db setCurrentTableName:self.tableName];
+    [self.db whereWithString:where];
+    return [[self.db queryCount] intValue] >0;
+}
+
+-(BOOL)hasFields:(NSDictionary *)fields{
+    [self.db clean];
+    [self.db setCurrentTableName:self.tableName];
+    [self.db whereWithDict:fields];
+    return [[self.db queryCount] intValue] >0;
 }
 @end
 
