@@ -7,31 +7,36 @@ PYFMDB
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
-## 前言
-之前是一直做web开发，对于做web开发的人而言一定熟悉各种ORM,各种语言针对mysql的ORM有很多，比如PHP的各类框架yii，thinkphp，laravel，ruby语言的rails, GO语言的beego等，IOS开发则面对的数据库是sqlite。FMDB 是基于sqlite的数据库操作类,稳定，但用起来还是不够简洁，PYFMDB是基于FMDB的更高层次的数据库操作类。
-## 程序介绍
-`PYFMDB`分为三部分，`PYFMDB` 基于FMDB负责数据库底层操作处理，`PYTable`是自定义Table的基类，提供基于具体数据库表的操作，是更高层次的封装PYFMDB,`PYStructure`是定义数据库表结构处理类。
-##快速入门
-###1.导入PYFMDB
-你可以在 Podfile 中加入下面一行代码来使用PYFMDB
+##Other Languages
+[简体中文](README_ZH.md) [繁体中文](README_TW.md)
+## Intro
+PYFMDB base on FMDB, it is an simple ORM!
+The package has three parts，`PYFMDB` support for base CURD，`PYTable` support for init database,table,indexes，and has simple methods for CURD,`PYStructure` define the table's structure.
+##Quick Getting Started
+###1.Import PYFMDB
+#### CocoaPods
 
-    pod 'PYFMDB'
+[CocoaPods](http://cocoapods.org) is a dependency manager for Cocoa projects.
+To integrate PYFMDB into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
-你也可以手动添加源码使用本项目，将开源代码中的`PYFMDB`和`FMDB` 目录添加到你的工程中，并且在工程设置的`Link Binary With Libraries`中，增加`libsqlite3.dylib`，如下图所示：
-
+``` ruby
+pod 'PYFMDB'
+```
+#### By Hands
+You can copy the dirs `PYFMDB`,`FMDB` into your project, find the setting  option  `Link Binary With Libraries` and add `libsqlite3.dylib` into it like this:
 ![](http://blog.devtang.com/images/key-value-store-setup.jpg)
 
-###2.创建自定义Table类
-创建一个Table类继承`PYTable`，例如演示代码中创建了`CarTable`类。
-#### 设置数据库表名
-在CarTable.m 中 重写如下方法:
+###2.Create Table
+Create Table extends `PYTable`，In the demo project, I have named it "CarTable"
+#### Set TableName
+The codes from CarTable.m  below:
 ```
 -(NSString *)tableName{
     return @"car";
 }
 ```
-#### 设置数据库表结构
-在CarTable.m 中 重写如下方法:
+#### Set Table structure
+The codes from CarTable.m  below:
 ```
 -(PYStructure *)structure{
     PYStructure * st = [[PYStructure alloc] init];
@@ -41,131 +46,140 @@ PYFMDB
     return st;
 }
 ```
-`PYStructureType`是定义的结构体，PYStructureTypeAutoInc 代表自增类型字段，PYStructureTypeNormalText 代表普通文本字段，PYStructureTypeNormalInt 代表普通int类型字段
-###3.自定义Table类的使用
-table类可以实现针对当前table的增删改查数据库操作。
+#####`PYStructureType`
+* PYStructureTypeAutoInc = 0,//AUTO INCREAMNT && PRIMARY KEY INT
+* PYStructureTypePrimaryInt = 1,//PRIMARY KEY INT
+* PYStructureTypePrimaryText = 2,//PRIMARY KEY TEXT
+* PYStructureTypeNormalInt = 3,//COMMON COLUMN KEY INT
+* PYStructureTypeNormalText = 4,//COMMON COLUMN KEY TEXT
+
+###3.CURD and Others
+init Table
 ```
 CarTable *table = [[CarTable alloc] init];
 ```
-####新增数据
-普通新增数据
+####Create 
+insert fields into the Table
 ```
-NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1}; 
+NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1}; 
 [table addFields:fields];
 ```
-新增或者更新数据【判断数据是否已存在，存在则更新数据，不存在则新增数据】
+if the table has the fields，then  do update; if not, then do add;
 ```
-NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1};
-[table addOrUpdateFields:fields andWhere:@"name='宝马'"];
+NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
+[table addOrUpdateFields:fields andWhere:@"name='BMW'"];
 ```
-判断是否已经存在数据，仅不存在数据时更新数据
+if the table has the fields, then ignore; if not, then add;
 ```
-NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1};
+NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
 [table addFieldsIfNotExist:fields];
 ```
-####删除数据
-指定字段删除
+####Delete
+set where with one condition for delete
 ```
-NSString *where = @"name='宝马'";
+NSString *where = @"name='BMW'";
 [table deleteWithWhere:where];
 ```
-多种条件删除
+set where with conditions for delete
 ```
-NSString *where = @"name='宝马' and id >=5";
+NSString *where = @"name='BMW' and id >=5";
 [table deleteWithWhere:where];
 ```
-清空数据表
+truncate the Table
 ```
 [table truncate];
 ```
-####更新数据
-更新多个字段
+####Update
+Update fields
 ```
-NSString *where = @"name='宝马'";
-NSDictionary *fields = @{@"name":@"奔驰",@"wheels":@2};
+NSString *where = @"name='BMW'";
+NSDictionary *fields = @{@"name":@"MINI",@"wheels":@2};
 [table updateFields:fields andWhere:where];
 ```
-更新1个字段
+Update one field
 ```
-[table setField:@"name" andValue:@"奔驰" andWhere:@"name='宝马'"];
+[table setField:@"name" andValue:@"BMW" andWhere:@"name='MINI'"];
 ```
-####查询数据
-查询表全部数据，全部字段，返回的结果为NSArray
+####Read
+all lines，all fields 
 ```
 NSArray *results = [table selectAll];
 ```
-按条件查询数据，全部字段，返回的结果为NSArray
+where conditions，all fields
 ```
- NSString *where = @"name='宝马'";
+ NSString *where = @"name='BMW'";
  NSArray *results = [table selectWithWhere:where];
 ```
-按条件查询数据，指定字段，返回结果为NSArray
-多个字段用半角逗号隔开
+where conditions，some of the fields
 ```
- NSString *where = @"name='宝马'";
+ NSString *where = @"name='BMW'";
  NSString *fields = @"id,wheels";
  NSArray *results = [table selectWithWhere:where andFields:fields];
 ```
-按条件查询数据，指定字段，设置分页，返回结果为NSArray
-要查询全部字段时 用 * 代表查询全部字段
+where conditions，some of the fields，paging
 ```
- NSString *where = @"name='宝马'";
+ NSString *where = @"name='BMW'";
  NSString *fields = @"id,wheels";
- //NSString *fields = @"*";
-NSArray *results = [table selectWithWhere:where andFields:fields andPage:1 andPageSize:10];//取第一页，每页10条
+ //NSString *fields = @"*";//all fields 
+NSArray *results = [table selectWithWhere:where andFields:fields andPage:1 andPageSize:10];//first page，pagesize=10
 ```
-按条件查询数据，指定字段，设置分页，设置排序，返回结果为NSArray
-排序中 desc 代表 降序，asc代表升序
-单个字段排序 如 id desc
-多个字段排序 如 id,wheel asc
+where conditions，some of the fields，paging，order
+order has "asc","desc"
+one field order: id desc
+some fields order: id,wheel asc
 ```
- NSString *where = @"name='宝马'";
+ NSString *where = @"name='BMW'";
  NSString *fields = @"id,wheels";
- //NSString *fields = @"*";
 NSArray *results = [table selectWithWhere:where andFields:fields andPage:1 andPageSize:10 andOrder:@"id desc"];
 ```
-按条件查询单行数据,返回结果为NSDictionary
+find one line fields
 ```
- NSString *where = @"name='宝马'";
+ NSString *where = @"name='BMW'";
  NSDictionary *result = [table findWithWhere:where];
 ```
-按条件查询单行单个字段数据，返回结果为id类型
+find one field
 ```
 id result = [table getField:@"name" andWhere:@"id=1"];
 ```
-####统计表总行数
+####Table Count
 ```
 NSUInteger tableCount = [table count];
 ```
-####判断表是否为空
+####IsEmpty?
 ```
 if([table isEmpty]){
         //table is empty
  }
 ```
-####判断数据是否存在
+####HasFields?
 ```
- NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1};
+ NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
     if([table hasFields:fields]){
-        //数据已存在
+        //Yes
     }
 ```
-####判断where查询是否有数据
+####HasWhere?
 ```
- if([table hasWhere:@"name='宝马'"]){
-        //有查询结果
+ if([table hasWhere:@"name='BMW'"]){
+        //Yes
     }
 ```
 
-####调试信息
+####Debug
 ```
-NSLog(@"dbpath:%@",table.databasePath);//数据库位置
-NSLog(@"lastSql:%@",table.lastSql);//最后执行的sql
-NSLog(@"dbname:%@",table.databaseName);//数据库名
-NSLog(@"tablename:%@",table.tableName);//数据表名
-NSLog(@"table structure:%@",table.structure.structureDictory);//数据表结构
-NSLog(@"table fields:%@",table.structure.fieldsString);//数据表字段
+NSLog(@"dbpath:%@",table.databasePath);
+NSLog(@"lastSql:%@",table.lastSql);
+NSLog(@"dbname:%@",table.databaseName);
+NSLog(@"tablename:%@",table.tableName);
+NSLog(@"table structure:%@",table.structure.structureDictory);
+NSLog(@"table fields:%@",table.structure.fieldsString);
 ```
 
+## Contact
 
+Follow and contact me by Email. If you find an issue, just [open a ticket](https://github.com/iterrypeng/PYFMDB/issues/new) on it. Pull requests are warmly welcome as well.
+
+## License
+
+PYFMDB is released under the MIT license. See LICENSE for details.
  
