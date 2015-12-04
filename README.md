@@ -57,11 +57,11 @@ The codes from CarTable.m  below
 }
 ```
 #####`PYStructureType`
-* PYStructureTypeAutoInc = 0,//AUTO INCREAMNT && PRIMARY KEY INT
-* PYStructureTypePrimaryInt = 1,//PRIMARY KEY INT
-* PYStructureTypePrimaryText = 2,//PRIMARY KEY TEXT
-* PYStructureTypeNormalInt = 3,//COMMON COLUMN KEY INT
-* PYStructureTypeNormalText = 4,//COMMON COLUMN KEY TEXT
+* PYStructureTypeAutoInc = 0,//Auto Increamnt, Primary Key, Int,Not Null
+* PYStructureTypePrimaryInt = 1,//Primary Key, Int,Not Null
+* PYStructureTypePrimaryText = 2,//Primary Key, Text,Not Null
+* PYStructureTypeNormalInt = 3,//Int,Not Null
+* PYStructureTypeNormalText = 4,//Text,Not Null
 
 ###Table methods
 Init Table
@@ -74,12 +74,12 @@ Insert fields into the Table
 NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1}; 
 [table addFields:fields];
 ```
-If the table has the fields，then  do update; otherwise,  do create;
+If the table has the fields，then  Do Update; otherwise, Do Create;
 ```
 NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
 [table addOrUpdateFields:fields andWhere:@"name='BMW'"];
 ```
-If the table has the fields, then ignore; otherwise, then add;
+If the table has the fields, then Do Ignore; otherwise, Do Create;
 ```
 NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
 [table addFieldsIfNotExist:fields];
@@ -159,14 +159,14 @@ if([table isEmpty]){
         //table is empty
  }
 ```
-####HasFields?
+####Has fields?
 ```
  NSDictionary *fields = @{@"name":@"BMW",@"wheels":@1};
     if([table hasFields:fields]){
         //Yes
     }
 ```
-####HasWhere?
+####Has where?
 ```
  if([table hasWhere:@"name='BMW'"]){
         //Yes
