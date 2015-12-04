@@ -1,18 +1,21 @@
 PYFMDB
 ==========
 
-![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]()
 ![Pod version](http://img.shields.io/cocoapods/v/PYFMDB.svg?style=flat)
+[![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/PYFMDB.svg)]()
 ![Platform info](http://img.shields.io/cocoapods/p/PYFMDB.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
+##其他語言版本
+[English](README.md) [簡體中文](README_ZH.md)
 ## 前言
 之前是壹直做web開發，對於做web開發的人而言壹定熟悉各種ORM,各種語言針對mysql的ORM有很多，比如PHP的各類框架yii，thinkphp，laravel，ruby語言的rails, GO語言的beego等，IOS開發則面對的數據庫是sqlite。FMDB 是基於sqlite的數據庫操作類,穩定，但用起來還是不夠簡潔，PYFMDB是基於FMDB的更高層次的數據庫操作類。
 ## 程序介紹
 `PYFMDB`分為三部分，`PYFMDB` 基於FMDB負責數據庫底層操作處理，`PYTable`是自定義Table的基類，提供基於具體數據庫表的操作，是更高層次的封裝PYFMDB,`PYStructure`是定義數據庫表結構處理類。
 ##快速入門
-###1.導入PYFMDB
+###導入PYFMDB
 妳可以在 Podfile 中加入下面壹行代碼來使用PYFMDB
 
     pod 'PYFMDB'
@@ -21,7 +24,7 @@ PYFMDB
 
 ![](http://blog.devtang.com/images/key-value-store-setup.jpg)
 
-###2.創建自定義Table類
+###創建自定義Table類
 創建壹個Table類繼承`PYTable`，例如演示代碼中創建了`CarTable`類。
 #### 設置數據庫表名
 在CarTable.m 中 重寫如下方法:
@@ -41,8 +44,14 @@ PYFMDB
     return st;
 }
 ```
-`PYStructureType`是定義的結構體，PYStructureTypeAutoInc 代表自增類型字段，PYStructureTypeNormalText 代表普通文本字段，PYStructureTypeNormalInt 代表普通int類型字段
-###3.自定義Table類的使用
+#####`PYStructureType`
+* PYStructureTypeAutoInc = 0,//主鍵，int類型，自增
+* PYStructureTypePrimaryInt = 1,//主鍵，int類型，自增
+* PYStructureTypePrimaryText = 2,//主鍵，text類型
+* PYStructureTypeNormalInt = 3,//普通列，int類型
+* PYStructureTypeNormalText = 4,//普通列，text類型
+
+### 自定義Table類的使用
 table類可以實現針對當前table的增刪改查數據庫操作。
 ```
 CarTable *table = [[CarTable alloc] init];
@@ -156,6 +165,19 @@ if([table isEmpty]){
         //有查詢結果
     }
 ```
+####原生sql支持
+執行壹個sql查詢
+```
+ NSString *sql = @"select * from car";
+ NSArray *results = [table executeQueryWithSql:sql]; 
+```
+執行壹個sql操作，如更新，刪除，插入等
+```
+ NSString *sql = @"delete from car where name='BMW'";
+ BOOL result = [table executeUpdateWithSql:sql];
+```
+
+
 
 ####調試信息
 ```
