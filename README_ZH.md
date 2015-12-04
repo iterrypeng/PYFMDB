@@ -1,12 +1,15 @@
 PYFMDB
 ==========
 
-![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]()
 ![Pod version](http://img.shields.io/cocoapods/v/PYFMDB.svg?style=flat)
+[![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/PYFMDB.svg)]()
 ![Platform info](http://img.shields.io/cocoapods/p/PYFMDB.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
+##其他语言版本
+[English](README.md) [繁体中文](README_TW.md)
 ## 前言
 之前是一直做web开发，对于做web开发的人而言一定熟悉各种ORM,各种语言针对mysql的ORM有很多，比如PHP的各类框架yii，thinkphp，laravel，ruby语言的rails, GO语言的beego等，IOS开发则面对的数据库是sqlite。FMDB 是基于sqlite的数据库操作类,稳定，但用起来还是不够简洁，PYFMDB是基于FMDB的更高层次的数据库操作类。
 ## 程序介绍
