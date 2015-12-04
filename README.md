@@ -48,9 +48,20 @@ table类可以实现针对当前table的增删改查数据库操作。
 CarTable *table = [[CarTable alloc] init];
 ```
 ####新增数据
+普通新增数据
 ```
 NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1}; 
 [table addFields:fields];
+```
+新增或者更新数据【判断数据是否已存在，存在则更新数据，不存在则新增数据】
+```
+NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1};
+[table addOrUpdateFields:fields andWhere:@"name='宝马'"];
+```
+判断是否已经存在数据，仅不存在数据时更新数据
+```
+NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1};
+[table addFieldsIfNotExist:fields];
 ```
 ####删除数据
 指定字段删除
@@ -132,6 +143,20 @@ if([table isEmpty]){
         //table is empty
  }
 ```
+####判断数据是否存在
+```
+ NSDictionary *fields = @{@"name":@"宝马",@"wheels":@1};
+    if([table hasFields:fields]){
+        //数据已存在
+    }
+```
+####判断where查询是否有数据
+```
+ if([table hasWhere:@"name='宝马'"]){
+        //有查询结果
+    }
+```
+
 ####调试信息
 ```
 NSLog(@"dbpath:%@",table.databasePath);//数据库位置
