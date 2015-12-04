@@ -1,14 +1,13 @@
 PYFMDB
 ==========
 
-[![GitHub license](https://img.shields.io/github/license/iterrypeng/PYFMDB.svg)]()
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)]()
 ![Pod version](http://img.shields.io/cocoapods/v/PYFMDB.svg?style=flat)
 [![CocoaPods](https://img.shields.io/cocoapods/metrics/doc-percent/PYFMDB.svg)]()
 ![Platform info](http://img.shields.io/cocoapods/p/PYFMDB.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
 [![Build Status](https://api.travis-ci.org/iterrypeng/PYFMDB.svg?branch=master)](https://travis-ci.org/iterrypeng/PYFMDB)
-[![Github All Releases](https://img.shields.io/github/downloads/iterrypeng/PYFMDB/total.svg)]()
 ##Other Languages
 [简体中文](README_ZH.md) [繁体中文](README_TW.md)
 ## Intro
@@ -165,6 +164,18 @@ if([table isEmpty]){
  if([table hasWhere:@"name='BMW'"]){
         //Yes
     }
+```
+
+####Origin Sql Support
+execute query sql
+```
+ NSString *sql = @"select * from car";
+ NSArray *results = [table executeQueryWithSql:sql]; 
+```
+execute update sql
+```
+ NSString *sql = @"delete from car where name='BMW'";
+ BOOL result = [table executeUpdateWithSql:sql];
 ```
 
 ####Debug
