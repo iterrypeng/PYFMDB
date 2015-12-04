@@ -124,9 +124,12 @@ where conditions，some of the fields，paging
  //NSString *fields = @"*";//all fields 
 NSArray *results = [table selectWithWhere:where andFields:fields andPage:1 andPageSize:10];//first page，pagesize=10
 ```
-where conditions，some of the fields，paging，order
-order has "asc","desc"
+where conditions，some of the fields，paging，ordering
+
+ordering has "asc","desc"
+
 one field order: id desc
+
 some fields order: id,wheel asc
 ```
  NSString *where = @"name='BMW'";
