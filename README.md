@@ -1,8 +1,9 @@
 PYFMDB
 ==========
 
-![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
+[![GitHub license](https://img.shields.io/github/license/iterrypeng/PYFMDB.svg)]()
 ![Pod version](http://img.shields.io/cocoapods/v/PYFMDB.svg?style=flat)
+[![CocoaPods](https://img.shields.io/cocoapods/iterrypeng/doc-percent/PYFMDB.svg)]()
 ![Platform info](http://img.shields.io/cocoapods/p/PYFMDB.svg?style=flat)
 [![Language](http://img.shields.io/badge/language-OC-brightgreen.svg?style=flat
 )](https://en.wikipedia.org/wiki/Objective-C)
