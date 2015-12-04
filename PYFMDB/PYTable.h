@@ -78,4 +78,11 @@
 
 -(BOOL)hasFields:(NSDictionary *)fields;
 
+#pragma mark - origin sql
+
+-(NSArray *)executeQueryWithSql:(NSString *)sql;
+
+-(BOOL)executeUpdateWithSql:(NSString *)sql;
+
+
 @end
