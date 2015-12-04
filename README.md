@@ -20,7 +20,7 @@ The package has three parts
 * `PYTable` Init database,Create table，simple CURD methods 
 * `PYStructure` Define the table's structure
 
-##Quick Getting Started
+##Getting Started
 ###Import PYFMDB
 #### CocoaPods
 
