@@ -12,7 +12,7 @@ PYFMDB
 ## 程序介绍
 `PYFMDB`分为三部分，`PYFMDB` 基于FMDB负责数据库底层操作处理，`PYTable`是自定义Table的基类，提供基于具体数据库表的操作，是更高层次的封装PYFMDB,`PYStructure`是定义数据库表结构处理类。
 ##快速入门
-###1.导入PYFMDB
+###导入PYFMDB
 你可以在 Podfile 中加入下面一行代码来使用PYFMDB
 
     pod 'PYFMDB'
@@ -21,7 +21,7 @@ PYFMDB
 
 ![](http://blog.devtang.com/images/key-value-store-setup.jpg)
 
-###2.创建自定义Table类
+###创建自定义Table类
 创建一个Table类继承`PYTable`，例如演示代码中创建了`CarTable`类。
 #### 设置数据库表名
 在CarTable.m 中 重写如下方法:
@@ -47,7 +47,8 @@ PYFMDB
 * PYStructureTypePrimaryText = 2,//主键，text类型
 * PYStructureTypeNormalInt = 3,//普通列，int类型
 * PYStructureTypeNormalText = 4,//普通列，text类型
-###3.自定义Table类的使用
+
+### 自定义Table类的使用
 table类可以实现针对当前table的增删改查数据库操作。
 ```
 CarTable *table = [[CarTable alloc] init];
